@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\TransaksiController;
+use App\Models\Transaksi;
+use Database\Seeders\TransaksiSeeder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [TransaksiController::class, 'index']);
+Route::get('/transaksi/create', [TransaksiController::class, 'create']);
+Route::get('/fetchBarang', [TransaksiController::class, 'fetchBarang']);
+Route::post('/transaksi', [TransaksiController::class, 'store']);
+Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit']);
