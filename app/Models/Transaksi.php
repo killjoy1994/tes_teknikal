@@ -15,6 +15,7 @@ class Transaksi extends Model
     protected $fillable = [
         'barang_id',
         'quantity',
+        'stok_sisa',
     ];
 
     public function barang() {

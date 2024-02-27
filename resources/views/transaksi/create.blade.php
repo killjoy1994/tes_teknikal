@@ -18,16 +18,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-2">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <h1 class="fw-bold text-secondary">Test Qtasnim</h1>
-            </a>
-        </div>
-    </nav>
-    <div class="container">
-
-    </div>
+    @include('include.navbar')
 
     <div class="container mt-5">
         @if ($errors->any())
@@ -65,7 +56,7 @@
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Jumlah Barang</label>
                         <input type="number" class="form-control" id="quantity" name="quantity"
-                            aria-describedby="emailHelp">
+                            placeholder="Masukkan jumlah barang..." aria-describedby="emailHelp">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

@@ -18,13 +18,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-2">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <h1 class="fw-bold text-secondary">Test Qtasnim</h1>
-            </a>
-        </div>
-    </nav>
+    @include('include.navbar')
     <div class="container">
 
     </div>
@@ -44,12 +38,13 @@
                 <h2>Edit Transaksi<a class="float-end btn btn-danger" href="/">Back</a></h2>
             </div>
             <div class="card-body">
-                <form action="/transaksi" method="POST">
+                <form action="{{ '/transaksi/' . $transaksiData->id }}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="mb-3">
                         <label for="jenisBarang" class="form-label">Jenis Barang</label>
                         <select class="form-select" id="jenisBarang" name="jenis_barang_id"
-                            value={{ $transaksiData->barang->jenisBarang->id }} aria-label="Default select example">
+                            aria-label="Default select example">
                             <option selected>Pilih jenis barang</option>
                             @foreach ($jenisBarangData as $item)
                                 <option value="{{ $item->id }}"
@@ -61,16 +56,17 @@
                     <div class="mb-3">
                         <label for="barang" class="form-label">Barang</label>
                         <select class="form-select" name="barang_id" id="barang" aria-label="Default select example">
-                            <option>Pilih barang</option>
-                            @foreach ($transaksiData->barang as $item)
-                                <option value="">{{ $item->id }}</option>
+                            @foreach ($barang as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ $transaksiData->barang_id == $item->id ? 'selected' : '' }}>
+                                    {{ $item->nama_barang }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Jumlah Barang</label>
                         <input type="number" class="form-control" id="quantity" name="quantity"
-                            aria-describedby="emailHelp">
+                            value={{ $transaksiData->quantity }} aria-describedby="emailHelp">
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
