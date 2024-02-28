@@ -27,6 +27,10 @@ class BarangController extends Controller
             'jenis_barang_id' => 'required',
             'nama_barang' => "required",
             'stok' => 'required'
+        ], [
+            'jenis_barang_id.required' => 'Pilih jenis barang',
+            'nama_barang.required' => 'Nama barang tidak boleh kosong',
+            'stok.required' => 'Jumlah stok barang tidak boleh kosong'
         ]);
 
         Barang::create([
@@ -48,11 +52,18 @@ class BarangController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'jenis_barang_id' => "required",
-            'nama_barang' => "required",
-            'stok' => "required",
-        ]);
+        $validated = $request->validate(
+            [
+                'jenis_barang_id' => "required",
+                'nama_barang' => "required",
+                'stok' => "required",
+            ],
+            [
+                'jenis_barang_id.required' => 'Pilih jenis barang',
+                'nama_barang.required' => 'Nama barang tidak boleh kosong',
+                'stok.required' => 'Jumlah stok barang tidak boleh kosong'
+            ]
+        );
 
         $barang = Barang::findOrFail($id);
 

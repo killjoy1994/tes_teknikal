@@ -22,6 +22,8 @@ class JenisBarangController extends Controller
     {
         $validated = $request->validate([
             'nama' => "required"
+        ], [
+            'nama.required' => 'Nama jenis barang tidak boleh kosong.'
         ]);
 
         JenisBarang::create([
@@ -42,6 +44,8 @@ class JenisBarangController extends Controller
     {
         $validated = $request->validate([
             'nama' => "required"
+        ], [
+            'nama.required' => 'Nama jenis barang tidak boleh kosong.'
         ]);
 
         $jenisBarang = JenisBarang::findOrFail($id);
@@ -53,7 +57,8 @@ class JenisBarangController extends Controller
         return redirect('/jenis-barang')->with('message', 'Jenis barang berhasil diupdate');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $jenisBarang = JenisBarang::findOrFail($id);
 
         $jenisBarang->delete();

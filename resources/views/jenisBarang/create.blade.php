@@ -22,7 +22,7 @@
                     <input type="text" class="form-control" id="quantity" placeholder="Masukkan nama jenis barang..."
                         name="nama">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary float-end">Submit</button>
             </form>
         </div>
     </div>

@@ -37,7 +37,7 @@
                     <input type="number" class="form-control" id="quantity" name="quantity"
                         placeholder="Masukkan jumlah barang..." aria-describedby="emailHelp">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary float-end">Submit</button>
             </form>
         </div>
     </div>

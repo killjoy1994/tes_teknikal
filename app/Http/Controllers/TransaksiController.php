@@ -50,7 +50,12 @@ class TransaksiController extends Controller
         ];
 
         $messages = [
+            'jenisBarang_first.required' => 'Pilih jenis barang pertama.',
+            'jenisBarang_second.required' => 'Pilih jenis barang kedua.',
             'jenisBarang_first.different' => 'Jenis barang tidak boleh sama.',
+            'start_date.required' => "Pilih tanggal start date",
+            'end_date.required' => "Pilih tanggal end date",
+            'end_date.after_or_equal' => "Tanggal end date harus lebih dari atau sama dengan tanggal start date",
         ];
 
         $validatedData = $request->validate($rules, $messages);
@@ -211,13 +216,6 @@ class TransaksiController extends Controller
         return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua', 'data1', 'data2', 'start_date', 'end_date'));
     }
 
-    public function create()
-    {
-        $jenisBarangData = JenisBarang::all();
-        $barangData = Barang::all();
-        return view("transaksi.create", compact('jenisBarangData', 'barangData'));
-    }
-
     public function sort(Request $request)
     {
         $sortBy = $request->input('sort_by');
@@ -246,13 +244,27 @@ class TransaksiController extends Controller
         return view('transaksi.index', compact('transaksiData'));
     }
 
+    public function create()
+    {
+        $jenisBarangData = JenisBarang::all();
+        $barangData = Barang::all();
+        return view("transaksi.create", compact('jenisBarangData', 'barangData'));
+    }
+
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'jenis_barang_id' => 'required',
-            'barang_id' => 'required',
-            'quantity' => 'required',
-        ]);
+        $validated = $request->validate(
+            [
+                'jenis_barang_id' => 'required',
+                'barang_id' => 'required',
+                'quantity' => 'required',
+            ],
+            [
+                'jenis_barang_id.required' => 'Jenis barang belum dipilih',
+                'barang_id.required' => 'Barang belum dipilih',
+                'quantity.required' => 'Jumlah barang belum terisi',
+            ]
+        );
 
         $barang = Barang::findOrFail($request->barang_id);
 
@@ -294,6 +306,10 @@ class TransaksiController extends Controller
             'jenis_barang_id' => 'required',
             'barang_id' => 'required',
             'quantity' => 'required'
+        ], [
+            'jenis_barang_id.required' => 'Jenis barang belum dipilih',
+            'barang_id.required' => 'Barang belum dipilih',
+            'quantity.required' => 'Jumlah barang belum terisi',
         ]);
 
         $transaksi = Transaksi::findOrFail($id);

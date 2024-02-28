@@ -43,7 +43,7 @@
 
 <body>
     @include('include.navbar')
-    <div class="container mt-5">
+    <div class="container my-5">
         <div class="row">
             @include('include.sidebar')
             <div class="col-md-10">

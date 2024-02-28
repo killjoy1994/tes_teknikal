@@ -36,7 +36,7 @@
                     <input type="number" class="form-control" id="stok" placeholder="Masukkan jumlah stok barang..."
                         name="stok">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary float-end">Submit</button>
             </form>
         </div>
     </div>

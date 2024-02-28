@@ -23,7 +23,7 @@
                     <input type="text" class="form-control" id="nama" placeholder="Masukkan nama jenis barang..." value="{{ $jenisBarang->nama }}"
                         name="nama">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary float-end">Submit</button>
             </form>
         </div>
     </div>
