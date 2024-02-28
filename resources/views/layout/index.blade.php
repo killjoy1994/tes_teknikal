@@ -44,7 +44,7 @@
 <body>
     @include('sweetalert::alert')
     @include('include.navbar')
-    <div class="container my-5">
+    <div class="container mb-5" style="margin-top: 100px">
         <div class="row">
             @include('include.sidebar')
             <div class="col-md-10">
