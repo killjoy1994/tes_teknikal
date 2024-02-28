@@ -25,22 +25,30 @@
                         </div>
                         <div class="card-body">
                             <div class="row mt-4">
-                                <div class="col-md-6">
-                                    <h5>Penjualan terendah</h5>
-                                    <div class="p-3 bg-danger" style="min-height: 120px; height: 100px">
-                                        <p class="text-white fw-bold">Nama Barang: {{ $data1['nama_barang_terendah'] }}</p>
-                                        <p class="text-white fw-bold">Total Penjualan: {{ $data1['penjualan_terendah'] }}
-                                        </p>
+                                @if ($data1)
+                                    <div class="col-md-6">
+                                        <h5>Penjualan terendah</h5>
+                                        <div class="p-3 bg-danger" style="min-height: 120px; height: 100px">
+                                            <p class="text-white fw-bold">Nama Barang: {{ $data1['nama_barang_terendah'] }}
+                                            </p>
+                                            <p class="text-white fw-bold">Total Penjualan:
+                                                {{ $data1['penjualan_terendah'] }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <h5>Penjualan tertinggi</h5>
-                                    <div class="p-3 bg-success" style="min-height: 120px; height: 100px">
-                                        <p class="text-white fw-bold">Nama Barang: {{ $data1['nama_barang_tertinggi'] }}</p>
-                                        <p class="text-white fw-bold">Total Penjualan: {{ $data1['penjualan_tertinggi'] }}
-                                        </p>
+                                    <div class="col-md-6">
+                                        <h5>Penjualan tertinggi</h5>
+                                        <div class="p-3 bg-success" style="min-height: 120px; height: 100px">
+                                            <p class="text-white fw-bold">Nama Barang: {{ $data1['nama_barang_tertinggi'] }}
+                                            </p>
+                                            <p class="text-white fw-bold">Total Penjualan:
+                                                {{ $data1['penjualan_tertinggi'] }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                <h5 class="text-center">Data pada tanggal {{ $start_date }} sd {{ $end_date }} kosong</h5>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -52,6 +60,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row mt-4">
+                                @if ($data2)
                                 <div class="col-md-6">
                                     <h5>Penjualan terendah</h5>
                                     <div class="p-3 bg-danger" style="min-height: 120px; height: 100px">
@@ -68,6 +77,9 @@
                                         </p>
                                     </div>
                                 </div>
+                                @else
+                                    <h5 class="text-center">Data pada tanggal {{ $start_date }} sd {{ $end_date }} kosong</h5>
+                                @endif
                             </div>
                         </div>
                     </div>

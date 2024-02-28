@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\JenisBarang;
 use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Mockery\Undefined;
 
@@ -44,13 +45,17 @@ class TransaksiController extends Controller
         $rules = [
             'jenisBarang_first' => 'required|different:jenisBarang_second',
             'jenisBarang_second' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ];
 
         $messages = [
-            'jenisBarang_first.different' => 'The first jenis barang must be different from the second jenis barang.',
+            'jenisBarang_first.different' => 'Jenis barang tidak boleh sama.',
         ];
 
         $validatedData = $request->validate($rules, $messages);
+
+        // dd($request->all());
 
         $data = [
             'barang_1' => $validatedData['jenisBarang_first'],
@@ -67,8 +72,19 @@ class TransaksiController extends Controller
         $arrTransaksiPertama = [];
 
         foreach ($arrBarangPertama as $item) {
-            $arrTransaksiPertama[] = $item->transaksi;
+            // $arrTransaksiPertama[] = $item->transaksi;
+            foreach ($item->transaksi as $data) {
+                $date1 = Carbon::parse($request->start_date)->toDateString();
+                $date2 = Carbon::parse($request->end_date)->toDateString();
+                $dataDate = Carbon::parse($data->created_at)->toDateString();
+
+                if (($date1 < $dataDate) && ($date2 >= $dataDate)) {
+                    $arrTransaksiPertama[] = $item->transaksi;
+                }
+            }
         }
+
+        // dd($arrTransaksiPertama);
 
         $arrTotalQuantityPertama = [];
 
@@ -93,7 +109,7 @@ class TransaksiController extends Controller
             }
         }
 
-        $minQuantityPertama = PHP_INT_MAX; // Initialize with a high value
+        $minQuantityPertama = PHP_INT_MAX;
         $minBarangIdPertama = null;
 
         foreach ($arrTotalQuantityPertama as $item) {
@@ -104,22 +120,37 @@ class TransaksiController extends Controller
         }
 
 
-        $data1 = [
-            'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdPertama)->nama_barang,
-            'nama_barang_terendah' => Barang::findOrFail($minBarangIdPertama)->nama_barang,
-            'penjualan_tertinggi' => $maxQuantityPertama,
-            'penjualan_terendah' => $minQuantityPertama
-        ];
+        if ($maxBarangIdPertama != null && $minBarangIdPertama != null) {
+            $data1 = [
+                'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdPertama)->nama_barang,
+                'nama_barang_terendah' => Barang::findOrFail($minBarangIdPertama)->nama_barang,
+                'penjualan_tertinggi' => $maxQuantityPertama,
+                'penjualan_terendah' => $minQuantityPertama
+            ];
+        } else {
+            $data1 = null;
+        }
 
-        
+
         // ========================= Jenis Barang Kedua ===============================
         $arrBarangKedua = $jenisBarangKedua->barang; // [kopi, teh]
 
         $arrTransaksiKedua = [];
 
         foreach ($arrBarangKedua as $item) {
-            $arrTransaksiKedua[] = $item->transaksi;
+            // $arrTransaksiKedua[] = $item->transaksi;
+            foreach ($item->transaksi as $data) {
+                $date1 = Carbon::parse($request->start_date)->toDateString();
+                $date2 = Carbon::parse($request->end_date)->toDateString();
+                $dataDate = Carbon::parse($data->created_at)->toDateString();
+
+                if (($date1 < $dataDate) && ($date2 >= $dataDate)) {
+                    $arrTransaksiKedua[] = $item->transaksi;
+                }
+            }
         }
+
+        // dd($arrTransaksiPertama);
 
         $arrTotalQuantityKedua = [];
 
@@ -134,6 +165,8 @@ class TransaksiController extends Controller
             ];
         }
 
+        //  dd($arrTotalQuantityKedua);
+
         $maxQuantityKedua = 0;
         $maxBarangIdKedua = null;
 
@@ -144,7 +177,9 @@ class TransaksiController extends Controller
             }
         }
 
-        $minQuantityKedua = PHP_INT_MAX; // Initialize with a high value
+        //  dd($maxBarangIdKedua);
+
+        $minQuantityKedua = PHP_INT_MAX;
         $minBarangIdKedua = null;
 
         foreach ($arrTotalQuantityKedua as $item) {
@@ -155,16 +190,25 @@ class TransaksiController extends Controller
         }
 
 
-        $data2 = [
-            'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdKedua)->nama_barang,
-            'nama_barang_terendah' => Barang::findOrFail($minBarangIdKedua)->nama_barang,
-            'penjualan_tertinggi' => $maxQuantityKedua,
-            'penjualan_terendah' => $minQuantityKedua
-        ];
+        if ($maxBarangIdKedua != null && $minBarangIdKedua != null) {
+            $data2 = [
+                'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdKedua)->nama_barang,
+                'nama_barang_terendah' => Barang::findOrFail($minBarangIdKedua)->nama_barang,
+                'penjualan_tertinggi' => $maxQuantityKedua,
+                'penjualan_terendah' => $minQuantityKedua
+            ];
+        } else {
+            $data2 = null;
+        }
 
-        // dd($maxBarangId);
+        // dd($data2);
+        $carbonDate1 = Carbon::createFromFormat('Y-m-d', $request->start_date);
+        $start_date = $carbonDate1->format('d/m/Y');
 
-        return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua', 'data1', 'data2'));
+        $carbonDate2 = Carbon::createFromFormat('Y-m-d', $request->end_date);
+        $end_date = $carbonDate2->format('d/m/Y');
+
+        return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua', 'data1', 'data2', 'start_date', 'end_date'));
     }
 
     public function create()
