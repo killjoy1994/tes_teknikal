@@ -57,23 +57,114 @@ class TransaksiController extends Controller
             'barang_2' => $validatedData['jenisBarang_second'],
         ];
 
+
         $jenisBarangPertama = JenisBarang::findOrFail($data['barang_1']);
         $jenisBarangKedua = JenisBarang::findOrFail($data['barang_2']);
 
-        $barangPertama = $jenisBarangPertama->barang; // [kopi, teh]
+        // ========================= Jenis Barang Pertama ===============================
+        $arrBarangPertama = $jenisBarangPertama->barang; // [kopi, teh]
 
-        // $transaksiPertamaTertinggi = null;
-        // $quantityTertinggi = 0;
+        $arrTransaksiPertama = [];
 
-        $dataTransaksiPertama = []; // [[barang_id: 1 quantity: 10], [barang_id: 2, quantity: 6]];
-
-        foreach ($barangPertama as $data) {
-            $dataTransaksiPertama[] = $data->transaksi;
+        foreach ($arrBarangPertama as $item) {
+            $arrTransaksiPertama[] = $item->transaksi;
         }
 
-        dd($dataTransaksiPertama);
+        $arrTotalQuantityPertama = [];
 
-        return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua'));
+        foreach ($arrTransaksiPertama as $key => $item) {
+            $total = 0;
+            foreach ($item as $data) {
+                $total += $data->quantity;
+            }
+            $arrTotalQuantityPertama[] = [
+                'barang_id' => $arrTransaksiPertama[$key][0]->barang_id,
+                'total_quantity' => $total
+            ];
+        }
+
+        $maxQuantityPertama = 0;
+        $maxBarangIdPertama = null;
+
+        foreach ($arrTotalQuantityPertama as $item) {
+            if ($item['total_quantity'] > $maxQuantityPertama) {
+                $maxQuantityPertama = $item['total_quantity'];
+                $maxBarangIdPertama = $item['barang_id'];
+            }
+        }
+
+        $minQuantityPertama = PHP_INT_MAX; // Initialize with a high value
+        $minBarangIdPertama = null;
+
+        foreach ($arrTotalQuantityPertama as $item) {
+            if ($item['total_quantity'] < $minQuantityPertama) {
+                $minQuantityPertama = $item['total_quantity'];
+                $minBarangIdPertama = $item['barang_id'];
+            }
+        }
+
+
+        $data1 = [
+            'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdPertama)->nama_barang,
+            'nama_barang_terendah' => Barang::findOrFail($minBarangIdPertama)->nama_barang,
+            'penjualan_tertinggi' => $maxQuantityPertama,
+            'penjualan_terendah' => $minQuantityPertama
+        ];
+
+        
+        // ========================= Jenis Barang Kedua ===============================
+        $arrBarangKedua = $jenisBarangKedua->barang; // [kopi, teh]
+
+        $arrTransaksiKedua = [];
+
+        foreach ($arrBarangKedua as $item) {
+            $arrTransaksiKedua[] = $item->transaksi;
+        }
+
+        $arrTotalQuantityKedua = [];
+
+        foreach ($arrTransaksiKedua as $key => $item) {
+            $total = 0;
+            foreach ($item as $data) {
+                $total += $data->quantity;
+            }
+            $arrTotalQuantityKedua[] = [
+                'barang_id' => $arrTransaksiKedua[$key][0]->barang_id,
+                'total_quantity' => $total
+            ];
+        }
+
+        $maxQuantityKedua = 0;
+        $maxBarangIdKedua = null;
+
+        foreach ($arrTotalQuantityKedua as $item) {
+            if ($item['total_quantity'] > $maxQuantityKedua) {
+                $maxQuantityKedua = $item['total_quantity'];
+                $maxBarangIdKedua = $item['barang_id'];
+            }
+        }
+
+        $minQuantityKedua = PHP_INT_MAX; // Initialize with a high value
+        $minBarangIdKedua = null;
+
+        foreach ($arrTotalQuantityKedua as $item) {
+            if ($item['total_quantity'] < $minQuantityKedua) {
+                $minQuantityKedua = $item['total_quantity'];
+                $minBarangIdKedua = $item['barang_id'];
+            }
+        }
+
+
+        $data2 = [
+            'nama_barang_tertinggi' => Barang::findOrFail($maxBarangIdKedua)->nama_barang,
+            'nama_barang_terendah' => Barang::findOrFail($minBarangIdKedua)->nama_barang,
+            'penjualan_tertinggi' => $maxQuantityKedua,
+            'penjualan_terendah' => $minQuantityKedua
+        ];
+
+        // dd($maxBarangId);
+
+        return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua', 'data1', 'data2'));
     }
 
     public function create()
