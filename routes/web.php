@@ -30,7 +30,7 @@ Route::controller(TransaksiController::class)->group(function () {
     Route::post('/transaksi', 'store');
     Route::get('/transaksi/{id}/edit', 'edit');
     Route::put('/transaksi/{id}', 'update');
-    Route::get('/transaksi/{id}/delete', 'destroy');
+    Route::delete('/transaksi/{id}/delete', 'destroy');
 });
 
 Route::controller(JenisBarangController::class)->group(function () {
@@ -39,7 +39,7 @@ Route::controller(JenisBarangController::class)->group(function () {
     Route::post('/jenis-barang', 'store');
     Route::get('/jenis-barang/{id}/edit', 'edit');
     Route::put('/jenis-barang/{id}', 'update');
-    Route::get('/jenis-barang/{id}/delete', 'destroy');
+    Route::delete('/jenis-barang/{id}/delete', 'destroy');
 });
 
 Route::controller(BarangController::class)->group(function () {
@@ -48,5 +48,5 @@ Route::controller(BarangController::class)->group(function () {
     Route::post('/barang', 'store');
     Route::get('/barang/{id}/edit', 'edit');
     Route::put('/barang/{id}', 'update');
-    Route::get('/barang/{id}/delete', 'destroy');
+    Route::delete('/barang/{id}/delete', 'destroy');
 });

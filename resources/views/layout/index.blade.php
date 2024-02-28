@@ -42,6 +42,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     @include('include.navbar')
     <div class="container my-5">
         <div class="row">

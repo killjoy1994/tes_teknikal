@@ -80,7 +80,7 @@
                             <td>
                                 <a href="{{ '/transaksi/' . $item->id . '/edit' }}" class="btn btn-success btn-sm">Edit</a>
                                 <a href="{{ '/transaksi/' . $item->id . '/delete' }}"
-                                    class="btn btn-danger btn-sm">Delete</a>
+                                    class="btn btn-danger btn-sm" data-confirm-delete="true">Delete</a>
                             </td>
                         </tr>
                     @empty

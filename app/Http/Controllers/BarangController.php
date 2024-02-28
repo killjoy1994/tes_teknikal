@@ -12,6 +12,10 @@ class BarangController extends Controller
     {
         $barang = Barang::all();
 
+        $title = 'Hapus barang!';
+        $text = "Apakah anda yakin menghapus?";
+        confirmDelete($title, $text);
+
         return view('barang.index', compact('barang'));
     }
 

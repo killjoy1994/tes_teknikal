@@ -15,6 +15,10 @@ class TransaksiController extends Controller
     {
         $transaksiData = Transaksi::paginate(7);
 
+        $title = 'Hapus data transaksi!';
+        $text = "Apakah anda yakin menghapus?";
+        confirmDelete($title, $text);
+
         return view("transaksi.index", compact('transaksiData'));
     }
 
@@ -29,6 +33,11 @@ class TransaksiController extends Controller
         $transaksiData = Transaksi::whereHas('barang', function ($query) use ($keyword) {
             $query->where('nama_barang', 'like', '%' . $keyword . '%');
         })->paginate(7);
+
+        $title = 'Hapus data transaksi!';
+        $text = "Apakah anda yakin menghapus?";
+        confirmDelete($title, $text);
+
 
         return view('transaksi.index', compact('transaksiData'));
     }
@@ -240,6 +249,10 @@ class TransaksiController extends Controller
             $transaksiData = Transaksi::orderBy('created_at', 'desc')->paginate(7);
         }
         // dd($transaksiData);
+        $title = 'Hapus data transaksi!';
+        $text = "Apakah anda yakin menghapus?";
+        confirmDelete($title, $text);
+
 
         return view('transaksi.index', compact('transaksiData'));
     }

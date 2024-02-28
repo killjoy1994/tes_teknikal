@@ -10,6 +10,11 @@ class JenisBarangController extends Controller
     public function index()
     {
         $jenisBarang = JenisBarang::all();
+
+        $title = 'Hapus jenis barang!';
+        $text = "Apakah anda yakin menghapus?";
+        confirmDelete($title, $text);
+        
         return view('jenisBarang.index', compact('jenisBarang'));
     }
 
