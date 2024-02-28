@@ -11,7 +11,7 @@
             <div class="d-flex justify-content-between">
                 <h2>Daftar Transaksi</h2>
                 <div class="">
-                    <a class="ms-2 btn btn-primary text-white" href="/transaksi/create">Bandingkan Data</a>
+                    <a class="ms-2 btn btn-primary text-white" href="/transaksi/compare">Bandingkan Data</a>
                     <a class="btn btn-success" href="/transaksi/create">Tambah Data</a>
                 </div>
             </div>
@@ -25,8 +25,8 @@
                             <form action="/search-barang">
                                 @csrf
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Cari nama barang..." name="search"
-                                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <input type="text" class="form-control" placeholder="Cari nama barang..."
+                                        name="search" aria-label="Recipient's username" aria-describedby="button-addon2">
                                     <button class="btn btn-outline-secondary" type="submit"
                                         id="button-addon2">Cari</button>
                                 </div>
@@ -92,6 +92,7 @@
                     @endforelse
                 </tbody>
             </table>
+            {{ $transaksiData->links() }}
         </div>
     </div>
 @endsection

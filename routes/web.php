@@ -24,6 +24,8 @@ Route::controller(TransaksiController::class)->group(function () {
     Route::get('/search-barang', 'search');
     Route::get('/sort-transaksi', 'sort');
     Route::get('/transaksi/create', 'create');
+    Route::get('/transaksi/compare', 'compare');
+    Route::get('/transaksi/compare-data', 'comparingData');
     Route::get('/fetchBarang', 'fetchBarang');
     Route::post('/transaksi', 'store');
     Route::get('/transaksi/{id}/edit', 'edit');

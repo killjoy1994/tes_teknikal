@@ -6,12 +6,13 @@ use App\Models\Barang;
 use App\Models\JenisBarang;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Mockery\Undefined;
 
 class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksiData = Transaksi::all();
+        $transaksiData = Transaksi::paginate(7);
 
         return view("transaksi.index", compact('transaksiData'));
     }
@@ -26,9 +27,53 @@ class TransaksiController extends Controller
 
         $transaksiData = Transaksi::whereHas('barang', function ($query) use ($keyword) {
             $query->where('nama_barang', 'like', '%' . $keyword . '%');
-        })->get();
+        })->paginate(7);
 
         return view('transaksi.index', compact('transaksiData'));
+    }
+
+    public function compare()
+    {
+        $jenisBarangData = JenisBarang::all();
+        return view('transaksi.compare.create', compact('jenisBarangData'));
+    }
+
+    public function comparingData(Request $request)
+    {
+        // dd($request->all());
+        $rules = [
+            'jenisBarang_first' => 'required|different:jenisBarang_second',
+            'jenisBarang_second' => 'required',
+        ];
+
+        $messages = [
+            'jenisBarang_first.different' => 'The first jenis barang must be different from the second jenis barang.',
+        ];
+
+        $validatedData = $request->validate($rules, $messages);
+
+        $data = [
+            'barang_1' => $validatedData['jenisBarang_first'],
+            'barang_2' => $validatedData['jenisBarang_second'],
+        ];
+
+        $jenisBarangPertama = JenisBarang::findOrFail($data['barang_1']);
+        $jenisBarangKedua = JenisBarang::findOrFail($data['barang_2']);
+
+        $barangPertama = $jenisBarangPertama->barang; // [kopi, teh]
+
+        // $transaksiPertamaTertinggi = null;
+        // $quantityTertinggi = 0;
+
+        $dataTransaksiPertama = []; // [[barang_id: 1 quantity: 10], [barang_id: 2, quantity: 6]];
+
+        foreach ($barangPertama as $data) {
+            $dataTransaksiPertama[] = $data->transaksi;
+        }
+
+        dd($dataTransaksiPertama);
+
+        return view('transaksi.compare.index', compact('jenisBarangPertama', 'jenisBarangKedua'));
     }
 
     public function create()
@@ -42,7 +87,7 @@ class TransaksiController extends Controller
     {
         $sortBy = $request->input('sort_by');
 
-        if($sortBy == "") {
+        if ($sortBy == "") {
             return redirect('/');
         }
 
@@ -51,15 +96,15 @@ class TransaksiController extends Controller
         if ($sortBy == "nama_barang_asc") {
             $transaksiData = Transaksi::join('barang', 'transaksi.barang_id', '=', 'barang.id')
                 ->orderBy('barang.nama_barang', 'asc')
-                ->get();
+                ->paginate(7);
         } else if ($sortBy == "nama_barang_desc") {
             $transaksiData = Transaksi::join('barang', 'transaksi.barang_id', '=', 'barang.id')
                 ->orderBy('barang.nama_barang', 'desc')
-                ->get();
+                ->paginate(7);
         } else if ($sortBy == "tanggal_transaksi_asc") {
-            $transaksiData = Transaksi::orderBy('created_at', 'asc')->get();
+            $transaksiData = Transaksi::orderBy('created_at', 'asc')->paginate(7);
         } else if ($sortBy == "tanggal_transaksi_desc") {
-            $transaksiData = Transaksi::orderBy('created_at', 'desc')->get();
+            $transaksiData = Transaksi::orderBy('created_at', 'desc')->paginate(7);
         }
         // dd($transaksiData);
 

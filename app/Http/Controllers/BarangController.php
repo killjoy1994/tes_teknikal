@@ -10,6 +10,44 @@ class BarangController extends Controller
 {
     public function index()
     {
+
+        $test = [
+            [
+                [
+                    'barang_id' => 1,
+                    'quantity' => 10
+                ],
+                [
+                    'barang_id' => 1,
+                    'quantity' => 15
+                ],
+            ],
+            [
+                [
+                    'barang_id' => 2,
+                    'quantity' => 10
+                ],
+                [
+                    'barang_id' => 2,
+                    'quantity' => 5
+                ],
+            ]
+        ];
+
+        $totalQuantityData = [];
+
+        foreach ($test as $data) {
+            $totalQuantity = 0;
+            foreach ($data as $item) {
+                $totalQuantity += $item['quantity'];
+            }
+            $totalQuantityData[] = [
+                'total_quantity' => $totalQuantity
+            ];
+        }
+
+        dd($totalQuantityData);
+
         $barang = Barang::all();
 
         return view('barang.index', compact('barang'));
